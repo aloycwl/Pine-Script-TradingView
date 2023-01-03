@@ -1,0 +1,15 @@
+//@version=5
+indicator(title="AC-3")
+a=#ffffff, b=#4b84ff, c=#787b86, d=#ff8f33, e=#00ff00, f=#ff0000, z=color.new(a,100)
+
+i1=input(title='Relative Strength Indicator (RSI)',defval=true)
+_o=ta.rsi(close, 14), plot(_o,color=i1?a:z), fill(hline(70,color=i1?c:z),hline(30,color=i1?c:z),color=i1?color.new(#7e57c2,80):z)
+
+i2=input(title='Stochastic',defval=true)
+k=ta.sma(ta.stoch(close,high,low,14),1), plot(k,color=i2?b:z), plot(ta.sma(k,3),color=i2?d:z), hline(80,color=i2?c:z), hline(20,color=i2?c:z)
+
+i3=input(title='Divergence',defval=true)
+pl=na(ta.pivotlow(_o,5,5))?false:true, ph=na(ta.pivothigh(_o,5,5))?false:true
+_i(cond)=> 5<=ta.barssince(cond==true) and ta.barssince(cond==true)<=60
+plot(pl?_o[5]:na,offset=-5,color=low[5]<ta.valuewhen(pl,low[5],1) and _o[5]>ta.valuewhen(pl,_o[5],1) and _i(pl[1]) and pl and i3?e:z,linewidth=2)
+plot(ph?_o[5]:na,offset=-5,color=high[5]>ta.valuewhen(ph,high[5],1) and _o[5]<ta.valuewhen(ph,_o[5],1) and _i(ph[1]) and ph and i3?f:z,linewidth=2)
