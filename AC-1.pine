@@ -4,7 +4,10 @@ a=#ffffff, b=#7777ff, c=#cccccc, d=#ff0000, e=#00ff00, f=#ffff00, z=color.new(a,
 _c=close
 
 i1=input(title='Exponential Moving Average (EMA)',defval=true)
-plot(ta.ema(_c,21),color=i1?d:z), plot(ta.ema(_c,50),color=i1?f:z), plot(ta.ema(_c,200),color=i1?a:z)
+plot(ta.ema(_c,20),color=i1?d:z), plot(ta.ema(_c,50),color=i1?f:z), plot(ta.ema(_c,200),color=i1?a:z)
+
+i1a=input(title='EMA Extra',defval=false)
+plot(ta.ema(_c,8),color=i1a?#990000:z), plot(ta.ema(_c,100),color=i1a?#ffff88:z)
 
 i2=input(title='Bollinger Band (BB)',defval=true)
 mid=ta.sma(_c,20), stdDev=2*ta.stdev(_c,20)
