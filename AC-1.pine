@@ -1,6 +1,6 @@
 //@version=5
 indicator(title="AC-1", overlay=true)
-a=#ffffff, b=#7777ff, c=#cccccc, d=#ff0000, e=#00ff00, f=#ffff00, z=color.new(#000000,100)
+a=#ffffff, b=#7777ff, c=#cccccc, d=#ff0000, e=#00ff00, f=#ffff00, z=color.new(a,100)
 _c=close
 
 i1=input(title='Exponential Moving Average (EMA)',defval=true)
@@ -30,8 +30,8 @@ plotshape(ta.crossunder(drp,0),'',shape.labeldown,location.abovebar,i5?d:z)
 i6=input(title='Ichimoku Cloud',defval=true)
 dc(_l)=>math.avg(ta.lowest(_l),ta.highest(_l))
 l1=math.avg(dc(9), dc(26)), l2=dc(52)
-plot(dc(9),color=#2962FF), plot(dc(26),color=#b71c1c), plot(close,offset=-25,color=#43A047)
-fill(plot(l1,offset=25,color=#a5d6a7),plot(l2,offset=25,color=#ef9a9a),color=l1>l2?color.new(#43a047,90):color.new(#f44336,90))
+plot(dc(9),color=i6?#2962FF:z), plot(dc(26),color=i6?#b71c1c:z), plot(close,offset=-25,color=i6?#43a047:z)
+fill(plot(l1,offset=25,color=i6?#a5d6a7:z),plot(l2,offset=25,color=i6?#ef9a9a:z),color=i6?l1>l2?color.new(#43a047,90):color.new(#f44336,90):z)
 
 //i99=input(title='Volume',defval=false)
 //plot(volume/_c,style=plot.style_columns,color=open>_c?#b03838:#008060)
