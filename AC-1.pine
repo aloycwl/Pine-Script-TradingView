@@ -1,17 +1,22 @@
 //@version=5
 indicator(title="AC-1", overlay=true)
-a=#ffffff, b=#7777ff, c=#cccccc, d=#ff0000, e=#00ff00, f=#ffff00
+a=#ffffff, c=#cccccc, d=#ff0000, e=#00ff00, f=#ffff00
 _c=close
 
 i1=input(title='Exponential Moving Average (EMA)',defval=true)
-plot(i1?ta.ema(_c,20):na,color=d), plot(i1?ta.ema(_c,50):na,color=f), plot(i1?ta.ema(_c,200):na,color=a)
+ema(_l) => _a=2/(_l+1), _s=0.0, _s:=_a*close+(1-_a)*nz(_s[1])
+plot(i1?ema(20):na,color=d), plot(i1?ema(50):na,color=f), plot(i1?ema(200):na,color=a)
 
 i1a=input(title='EMA Extra',defval=false)
-plot(i1a?ta.ema(_c,8):na,color=#990000), plot(i1a?ta.ema(_c,100):na,color=#ffff88)
+plot(i1a?ema(8):na,color=#990000), plot(i1a?ema(100):na,color=#ffff88)
 
 i2=input(title='Bollinger Band (BB)',defval=true)
-mid=ta.sma(_c,20), stdDev=2*ta.stdev(_c,20)
-plot(i2?mid+stdDev:na,color=b), plot(i2?mid-stdDev:na,color=b)
+sma() =>
+    _s=0.0
+    for i=0 to 19
+        _s+=close[i]/20
+stdDev=2*ta.stdev(_c,20)
+plot(i2?sma()+stdDev:na), plot(i2?sma()-stdDev:na)
 
 i3=input(title='Parabolic SAR',defval=true)
 plot(i3?ta.sar(0.02,0.02,0.2):na,style=plot.style_cross,color=c)
