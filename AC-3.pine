@@ -1,15 +1,35 @@
 //@version=5
 indicator(title="AC-3")
 a=#ffffff, b=#4b84ff, c=#787b86, d=#ff8f33, e=#00ff00, f=#ff0000, z=color.new(a,100)
+C=close
 
 i1=input(title='Relative Strength Indicator (RSI)',defval=true)
-_o=ta.rsi(close, 14), plot(i1?_o:na,color=a), hline(i1?70:na,color=c), hline(i1?30:na,color=c)
+TC=ta.change(C)
+SM(_p,_l)=>
+    _s=0.0
+    for i=0 to _l-1
+        _s+=_p[i]/_l
+RM(_p) =>
+	_a=float(1)/14
+	_s=0.0
+	_s:=na(_s[1])?SM(_p,14):_a*_p+(1-_a)*nz(_s[1])
+R=100-100/(1+RM(TC>=0?TC:0)/RM(TC<0?-TC:0))
+plot(i1?R:na,color=a)
+hline(i1?70:na)
+hline(i1?30:na)
 
 i2=input(title='Stochastic',defval=true)
-k=ta.sma(ta.stoch(close,high,low,14),1), plot(i2?k:na,color=b), plot(i2?ta.sma(k,3):na,color=d), hline(i2?80:na,color=c), hline(i2?20:na,color=c)
+L=ta.lowest(low,14)
+K=(C-L)/(ta.highest(high,14)-L)*100
+plot(i2?K:na)
+plot(i2?SM(K,3):na,color=d)
+hline(i2?80:na)
+hline(i2?20:na)
 
 i3=input(title='Divergence',defval=true)
-pl=na(ta.pivotlow(_o,5,5))?false:true, ph=na(ta.pivothigh(_o,5,5))?false:true
-_i(cond)=> 5<=ta.barssince(cond==true) and ta.barssince(cond==true)<=60
-plot(pl?_o[5]:na,offset=-5,color=low[5]<ta.valuewhen(pl,low[5],1) and _o[5]>ta.valuewhen(pl,_o[5],1) and _i(pl[1]) and pl and i3?e:z,linewidth=2)
-plot(ph?_o[5]:na,offset=-5,color=high[5]>ta.valuewhen(ph,high[5],1) and _o[5]<ta.valuewhen(ph,_o[5],1) and _i(ph[1]) and ph and i3?f:z,linewidth=2)
+pl=na(ta.pivotlow(R,5,5))?false:true
+ph=na(ta.pivothigh(R,5,5))?false:true
+_i(cond)=>
+    5<=ta.barssince(cond==true) and ta.barssince(cond==true)<=60
+plot(pl?R[5]:na,offset=-5,color=low[5]<ta.valuewhen(pl,low[5],1) and R[5]>ta.valuewhen(pl,R[5],1) and _i(pl[1]) and pl and i3?e:z,linewidth=2)
+plot(ph?R[5]:na,offset=-5,color=high[5]>ta.valuewhen(ph,high[5],1) and R[5]<ta.valuewhen(ph,R[5],1) and _i(ph[1]) and ph and i3?f:z,linewidth=2)
