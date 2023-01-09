@@ -17,12 +17,12 @@ plot(i1a?EM(8):na,color=#990000)
 plot(i1a?EM(100):na,color=#ffff88)
 
 i2=input(title='Bollinger Band (BB)',defval=true)
-SM()=>
+SM(_p)=>
     _s=0.0
     for i=0 to 19
-        _s+=C[i]/20
-stdDev=2*ta.stdev(C,20)
-sma=SM()
+        _s+=_p[i]/20
+stdDev=2*math.sqrt(SM(math.pow(C,2))-math.pow(math.sum(C,20),2)/400)
+sma=SM(C)
 plot(i2?sma+stdDev:na)
 plot(i2?sma-stdDev:na)
 
@@ -34,7 +34,7 @@ SA()=>
 	var bool _b=na
 	bool _f=false
 	if bar_index==1
-		if close>close[1]
+		if C>C[1]
 			_b:=true
 			_m:=high
 			_r:=low[1]
