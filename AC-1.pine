@@ -13,7 +13,7 @@ plot(i1?EM(50):na,color=f)
 plot(i1?EM(200):na,color=a)
 
 i1a=input(title='EMA Extra',defval=false)
-plot(i1a?EM(8):na,color=#990000)
+plot(i1a?EM(5):na,color=#00ff40)
 plot(i1a?EM(100):na,color=#ffff88)
 
 i2=input(title='Bollinger Band (BB)',defval=true)
@@ -96,8 +96,8 @@ plotshape(i5?ta.crossover(drp,0):na,'',shape.labelup,location.belowbar,e)
 plotshape(i5?ta.crossunder(drp,0):na,'',shape.labeldown,location.abovebar,d)
 
 i6=input(title='Ichimoku Cloud',defval=false)
-dc(_l)=>math.avg(ta.lowest(_l),ta.highest(_l))
-l1=math.avg(dc(9),dc(26))
+dc(_l)=>(ta.lowest(_l)+ta.highest(_l))/2
+l1=(dc(9)+dc(26))/2
 l2=dc(52)
 plot(i6?dc(9):na,color=#2962FF)
 plot(i6?dc(26):na,color=#b71c1c)
@@ -105,4 +105,4 @@ plot(i6?C:na,offset=-25,color=#43a047)
 fill(plot(i6?l1:na,offset=25,color=#a5d6a7),plot(i6?l2:na,offset=25,color=#ef9a9a),color=l1>l2?color.new(#43a047,90):color.new(#f44336,90))
 
 i7=input(title='Volume',defval=false)
-plotshape(i7?volume:na,style=shape.square,location=location.bottom,color=open>C?#b03838:#008060)
+plot(i7?volume:na,style=plot.style_columns,color=open>C?#b03838:#008060)
