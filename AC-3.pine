@@ -33,3 +33,14 @@ _i(cond)=>
     5<=ta.barssince(cond==true) and ta.barssince(cond==true)<=60
 plot(pl?R[5]:na,offset=-5,color=low[5]<ta.valuewhen(pl,low[5],1) and R[5]>ta.valuewhen(pl,R[5],1) and _i(pl[1]) and pl and i3?e:z,linewidth=2)
 plot(ph?R[5]:na,offset=-5,color=high[5]>ta.valuewhen(ph,high[5],1) and R[5]<ta.valuewhen(ph,R[5],1) and _i(ph[1]) and ph and i3?f:z,linewidth=2)
+
+i4=input(title='Directional Movement Index',defval=true)
+up=ta.change(high)
+down=-ta.change(low)
+trur=ta.rma(ta.tr,14)
+plus=fixnan(100*RM(na(up)?na:up>down and up>0?up:0)/trur)
+minus=fixnan(100*RM(na(down)?na:down>up and down>0?down:0)/trur)
+sum=plus+minus
+plot(i4?100*RM(math.abs(plus-minus)/(sum==0?1:sum)):na,color=#F50057)
+plot(i4?plus:na,color=#2962FF)
+plot(i4?minus:na,color=#FF6D00)
